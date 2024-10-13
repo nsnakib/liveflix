@@ -2,6 +2,7 @@ package com.example.liveflix
 
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -11,30 +12,51 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var player: ExoPlayer
     private lateinit var playerView: PlayerView
+    private lateinit var btnVideoStream: Button
+    private lateinit var btnLiveStream: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         playerView = findViewById(R.id.player_view)
-        player = ExoPlayer.Builder(this).build()
+        btnVideoStream = findViewById(R.id.btn_video_stream)
+        btnLiveStream = findViewById(R.id.btn_live_stream)
 
-        // Set the PlayerView's player
+        player = ExoPlayer.Builder(this).build()
         playerView.player = player
 
-        // Video URL to be played
-        val videoUri = Uri.parse("https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4")
+        // Set up click listener for Video Stream
+        btnVideoStream.setOnClickListener {
+            playVideoStream()
+        }
 
-        // Create a MediaItem
+        // Set up click listener for Live Stream
+        btnLiveStream.setOnClickListener {
+            playLiveStream()
+        }
+    }
+
+    private fun playVideoStream() {
+        val videoUri = Uri.parse("https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4")
         val mediaItem = MediaItem.fromUri(videoUri)
 
-        // Set the media item to be played
+        // Set the media item for the player
         player.setMediaItem(mediaItem)
-
-        // Prepare the player
         player.prepare()
+        player.playWhenReady = true
+    }
 
-        // Start playing the video
+    private fun playLiveStream() {
+        val liveStreamUri = Uri.parse("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8")
+        val mediaItem = MediaItem.Builder()
+            .setUri(liveStreamUri)
+            .setLiveConfiguration(MediaItem.LiveConfiguration.Builder().build())
+            .build()
+
+        // Set the live stream media item
+        player.setMediaItem(mediaItem)
+        player.prepare()
         player.playWhenReady = true
     }
 

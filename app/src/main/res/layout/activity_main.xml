@@ -4,6 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/btn_video_stream"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stream Video" />
+
+    <Button
+        android:id="@+id/btn_live_stream"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Live Stream" />
+
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/player_view"
         android:layout_width="match_parent"
