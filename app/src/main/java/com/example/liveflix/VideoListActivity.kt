@@ -2,6 +2,8 @@ package com.example.liveflix
 
 
 
+
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,23 +12,26 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import java.io.InputStreamReader
 
-class MainActivity : AppCompatActivity() {
+class VideoListActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var videoAdapter: VideoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_video_list)
 
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val videoList = loadVideosFromJson()
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView() {
+        val videoList = loadVideosFromJson() // This should return List<Video>
         videoAdapter = VideoAdapter(videoList) { video ->
-            // Ensure you're passing the URL string instead of the entire Video object
             val intent = Intent(this, VideoPlayerActivity::class.java)
-            intent.putExtra("videoUrl", video.sources[0]) // Pass the video URL here
+            intent.putExtra("videoUrl", video.sources[0]) // Make sure this is a String
             startActivity(intent)
         }
         recyclerView.adapter = videoAdapter
@@ -39,3 +44,4 @@ class MainActivity : AppCompatActivity() {
         return videoResponse.categories[0].videos
     }
 }
+
